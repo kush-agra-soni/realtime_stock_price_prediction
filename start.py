@@ -6,11 +6,10 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
-# Global variable for the loading animation
 stop_loading = False
 
 def loading_animation(message: str):
-    """Displays a loading spinner animation."""
+    # Displays a loading spinner animation
     spinner = ['◜', '◝', '◞', '◟']
     i = 0
     while not stop_loading:
@@ -20,7 +19,7 @@ def loading_animation(message: str):
         time.sleep(0.1)
 
 def pick_folder():
-    """Prompts the user to select a folder via GUI or terminal input."""
+    # Prompts the user to select a folder via GUI or terminal input.
     try:
         root = tk.Tk()
         root.withdraw()
@@ -39,7 +38,7 @@ def pick_folder():
         return folder
 
 def create_virtual_environment(venv_dir):
-    """Creates a virtual environment at the specified directory."""
+    # Creates a virtual environment at the specified directory.
     if os.path.exists(venv_dir):
         print(f"\n>--Virtual environment 'RSPP' already exists at: {venv_dir}--<")
         print(">--Skipping venv creation--<\n")
@@ -62,7 +61,7 @@ def create_virtual_environment(venv_dir):
         print("\r>--Virtual environment created successfully--<\n")
 
 def install_requirements(venv_dir):
-    """Installs required packages using the install_req.py script."""
+    # Installs required packages using the install_req.py script
     print("\n>--Calling package injector--<")
     this_dir = os.path.dirname(os.path.abspath(__file__))
     step_1_script = os.path.join(this_dir, "utils", "install_req.py")
@@ -73,7 +72,7 @@ def install_requirements(venv_dir):
         sys.exit(1)
 
 def run_app(venv_dir):
-    """Runs the core.app.py file directly."""
+    # Runs the core.app.py file directly
     print("\n>--Launching the Stock Predictor App--<")
     app_script = os.path.join("core", "app.py")
     python_exec = os.path.join(venv_dir, "Scripts", "python.exe")
@@ -97,4 +96,4 @@ if __name__ == "__main__":
 
 
 
-    
+
