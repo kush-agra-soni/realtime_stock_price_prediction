@@ -65,16 +65,22 @@ def install_requirements(venv_dir):
     """Installs required packages using the install_req.py script."""
     print("\n>--Calling package injector--<")
     this_dir = os.path.dirname(os.path.abspath(__file__))
-    step_1_script = os.path.join(this_dir, "ml_pipeline", "install_req.py")
+    step_1_script = os.path.join(this_dir, "utils", "install_req.py")
     try:
         subprocess.check_call([sys.executable, step_1_script, venv_dir])
     except subprocess.CalledProcessError as e:
         print(f"⚠ Failed to install requirements: {e}")
         sys.exit(1)
 
-def main():
-    """Main function to orchestrate the setup process."""
-    print("\n>--Welcome to the RSPP Setup--<")
+def run_app(venv_dir):
+    """Runs the core.app.py file directly."""
+    print("\n>--Launching the Stock Predictor App--<")
+    app_script = os.path.join("core", "app.py")
+    python_exec = os.path.join(venv_dir, "Scripts", "python.exe")
+    subprocess.check_call([python_exec, app_script], cwd=os.path.abspath(os.path.dirname(__file__)))
+
+if __name__ == "__main__":
+    print("\n>--Welcome to the Stock Predictor Setup--<")
 
     # Step 1: Pick folder for virtual environment
     venv_path = pick_folder()
@@ -86,5 +92,9 @@ def main():
     # Step 3: Install requirements
     install_requirements(venv_dir)
 
-if __name__ == "__main__":
-    main()
+    # Step 4: Run the app
+    run_app(venv_dir)
+
+
+
+    
