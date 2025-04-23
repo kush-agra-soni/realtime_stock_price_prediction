@@ -1,3 +1,5 @@
 .venv/
 core/__pycache__/
 core/*.pyc
+utils/__pycache__/
+utils/*.pyc
