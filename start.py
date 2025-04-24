@@ -3,8 +3,6 @@ import sys
 import time
 import threading
 import subprocess
-import tkinter as tk
-from tkinter import filedialog, messagebox
 
 stop_loading = False
 
@@ -18,29 +16,10 @@ def loading_animation(message: str):
         i += 1
         time.sleep(0.1)
 
-def pick_folder():
-    # Prompts the user to select a folder via GUI or terminal input.
-    try:
-        root = tk.Tk()
-        root.withdraw()
-        folder = filedialog.askdirectory(title="Select Folder to Create VENV")
-        if not folder:
-            messagebox.showinfo("Cancelled", "Setup cancelled by the user.")
-            print("\n>--Setup cancelled--<")
-            sys.exit(0)
-        return folder
-    except Exception:
-        print("⚠ GUI selection failed. Falling back to terminal input.")
-        folder = input("Enter the full path for venv manually: ").strip()
-        if not folder:
-            print("\n>--No path provided. Exiting.--<")
-            sys.exit(1)
-        return folder
-
 def create_virtual_environment(venv_dir):
     # Creates a virtual environment at the specified directory.
     if os.path.exists(venv_dir):
-        print(f"\n>--Virtual environment 'RSPP' already exists at: {venv_dir}--<")
+        print(f"\n>--Virtual environment '.venv' already exists at: {venv_dir}--<")
         print(">--Skipping venv creation--<\n")
         return
 
@@ -81,9 +60,9 @@ def run_app(venv_dir):
 if __name__ == "__main__":
     print("\n>--Welcome to the Stock Predictor Setup--<")
 
-    # Step 1: Pick folder for virtual environment
-    venv_path = pick_folder()
-    venv_dir = os.path.join(venv_path, "RSPP")
+    # Step 1: Set default folder for virtual environment
+    repo_dir = os.path.dirname(os.path.abspath(__file__))
+    venv_dir = os.path.join(repo_dir, ".venv")
 
     # Step 2: Create virtual environment
     create_virtual_environment(venv_dir)
@@ -93,7 +72,3 @@ if __name__ == "__main__":
 
     # Step 4: Run the app
     run_app(venv_dir)
-
-
-
-
