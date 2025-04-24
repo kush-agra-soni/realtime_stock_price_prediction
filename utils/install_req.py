@@ -59,26 +59,16 @@ if __name__ == "__main__":
 
     pip_exec, python_exec = get_venv_paths(venv_dir)
     required_packages = [
-        "pandas",
-        "numpy",
-        "scikit-learn",
-        "matplotlib",
-        "seaborn",
-        "streamlit",
-        "yfinance",
-        "tensorflow",
-        "python-dotenv",
-        "loguru",
-        "pandas_ta",
-        "statsmodels",
-        "pandas_datareader",
-        "plotly",
         "scipy",           
-        "joblib",          
-        "keras",           
-        "requests",        
-        "pytest",          
-        "pyarrow",         
+        "numpy",
+        "keras",
+        "plotly",
+        "pandas",
+        "yfinance",
+        "streamlit",
+        "tensorflow",
+        "statsmodels",
+        "scikit-learn"
         ]
 
     install_packages(python_exec, required_packages)
