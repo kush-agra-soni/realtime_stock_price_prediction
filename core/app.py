@@ -1,3 +1,4 @@
+
 import plotly.graph_objects as go
 import datetime
 import numpy as np
@@ -37,6 +38,7 @@ start_date = st.date_input("Start Date", datetime.date(2018, 1, 1))
 end_date   = st.date_input("End Date", datetime.date.today())
 epochs     = st.sidebar.slider("Number of Epochs", 1, 70, 25)
 days       = st.sidebar.slider("Number of Prediction Days", 1, 30, 7)
+volatility_factor = st.sidebar.slider("Volatility Factor", 0.01, 0.2, 0.05)
 
 # ---- Load & Validate Data ----
 data = load_data(ticker, start_date, end_date)
@@ -55,7 +57,6 @@ data.dropna(subset=price_cols, inplace=True)
 if st.button("Predict Prices"):
     features = price_cols + ['Volume']
     n_steps  = 30
-    volatility_factor = 0.05  # Adjust this to control volatility
 
     # Prepare multivariate data
     X, y_open, y_high, y_low, y_close, scaler = prepare_multivariate_data(data[features], n_steps)
