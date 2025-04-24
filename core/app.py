@@ -1,10 +1,9 @@
-
-import plotly.graph_objects as go
 import datetime
 import numpy as np
 import pandas as pd
 import yfinance as yf
 import streamlit as st
+import plotly.graph_objects as go
 from train import prepare_multivariate_data, build_and_train_model, predict_future
 
 
