@@ -4,6 +4,7 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.losses import Huber
 
 # === Constants ===
 FEATURE_COLS = ['Open', 'High', 'Low', 'Close', 'Volume']
@@ -24,35 +25,41 @@ def prepare_multivariate_data(df, n_steps, features=FEATURE_COLS):
     return np.array(X), np.array(y_open), np.array(y_high), np.array(y_low), np.array(y_close), scaler
 
 # === Model Building ===
-# === Model Building ===
 def build_and_train_model(X, y, n_steps, n_features, epochs=10, batch_size=32, lr=0.001):
     model = Sequential()
-    model.add(LSTM(128, return_sequences=True, input_shape=(n_steps, n_features)))
-    model.add(Dropout(0.2))
-    model.add(LSTM(128))
-    model.add(Dropout(0.2))
-    model.add(Dense(64, activation='relu'))
+
+    # Add more complexity with larger LSTM layers
+    model.add(LSTM(256, return_sequences=True, input_shape=(n_steps, n_features)))  # Increase LSTM size
+    model.add(Dropout(0.1))  # Reduced dropout to let model learn better
+
+    model.add(LSTM(256))  # Increase LSTM size
+    model.add(Dropout(0.1))  # Reduced dropout
+    
+    model.add(Dense(64, activation='relu'))  # More dense layers for non-linearity
     model.add(Dense(4))  # Output 4 values: Open, High, Low, Close
 
-    model.compile(optimizer=Adam(learning_rate=lr), loss='mse')
+    # Use Huber loss for better handling of outliers
+    model.compile(optimizer=Adam(learning_rate=lr), loss=Huber())
+
     model.fit(X, y, epochs=epochs, batch_size=batch_size, validation_split=0.1, verbose=1)
 
     return model
 
-
-
-def predict_future(model, data, scaler, features, n_steps, n_future_days, volatility_factor=0.05):
+# === Predict Future Prices ===
+def predict_future(model, data, scaler, features, n_steps, n_future_days, volatility_factor=0.1):
     last_seq = data[features].tail(n_steps).values
     seq_scaled = scaler.transform(last_seq)
+    
     preds_scaled_open, preds_scaled_high, preds_scaled_low, preds_scaled_close = [], [], [], []
 
     for _ in range(n_future_days):
+        # Predict Open, High, Low, Close
         next_open, next_high, next_low, next_close = model.predict(seq_scaled[np.newaxis, ...], verbose=0)[0]
 
-        # Add volatility by introducing noise
+        # Add volatility by introducing noise (higher volatility)
         noise_open = np.random.normal(0, volatility_factor * next_open)  # Random noise for Open
         noise_high = np.random.normal(0, volatility_factor * next_high)  # Random noise for High
-        noise_low = np.random.normal(0, volatility_factor * next_low)    # Random noise for Low
+        noise_low = np.random.normal(0, volatility_factor * next_low)   # Random noise for Low
         noise_close = np.random.normal(0, volatility_factor * next_close)  # Random noise for Close
 
         # Apply noise
@@ -81,6 +88,5 @@ def predict_future(model, data, scaler, features, n_steps, n_future_days, volati
     full_preds_scaled[:, 2] = preds_scaled_low
     full_preds_scaled[:, 3] = preds_scaled_close
     preds = scaler.inverse_transform(full_preds_scaled)
+
     return preds
-
-
