@@ -113,7 +113,8 @@ Install every required thing using:
 ```
 
 ---
-Deployed Version (Link) - [text](https://predistocks.streamlit.app/)
+Deployed Version - [Link](https://predistocks.streamlit.app/)
+
 ---
 
 ## Results
