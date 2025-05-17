@@ -112,6 +112,10 @@ Install every required thing using:
 >>>python start.py
 ```
 
+---
+Deployed Version (Link) - [text](https://predistocks.streamlit.app/)
+---
+
 ## Results
 
 - **Forecasting Accuracy**:
