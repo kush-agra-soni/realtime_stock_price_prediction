@@ -37,7 +37,7 @@ start_date = st.date_input("Start Date", datetime.date(2018, 1, 1))
 end_date   = st.date_input("End Date", datetime.date.today())
 epochs     = st.sidebar.slider("Number of Epochs", 1, 70, 25)
 days       = st.sidebar.slider("Number of Prediction Days", 1, 30, 7)
-volatility_factor = st.sidebar.slider("Volatility Factor", 0.01, 0.2, 0.02)
+volatility_factor = st.sidebar.slider("Volatility Factor", 0.01, 0.2, 0.05)
 
 # ---- Load & Validate Data ----
 data = load_data(ticker, start_date, end_date)
